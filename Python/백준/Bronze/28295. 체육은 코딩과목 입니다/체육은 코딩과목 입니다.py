@@ -1,0 +1,1 @@
+print(['N','E','S','W'][sum([int(input()) for i in range(10)])%4])
