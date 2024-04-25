@@ -1,0 +1,1 @@
+print(sum([int(input()[2:]) <= 90 for i in range(int(input()))]))
