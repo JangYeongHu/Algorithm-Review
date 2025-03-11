@@ -1,7 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define FASTIO cin.tie(0), ios::sync_with_studio(0); cout.tie(0);
+#define FASTIO cin.tie(0), ios::sync_with_stdio(0); cout.tie(0);
 int main() {
+    FASTIO;
 	int t;
 	cin >> t;
 	while (t-- > 0) {
