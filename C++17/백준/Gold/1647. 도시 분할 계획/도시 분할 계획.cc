@@ -6,6 +6,7 @@ int height[100'001];
 int parent[100'001];
 
 int main() {
+	cin.tie(0); ios::sync_with_stdio(0);
 	int n,m;
 	cin >> n >> m;
 	for (int i = 0; i < m; i++) {
