@@ -1,53 +1,57 @@
-#include <cstdio>
-#include <queue>
-std::vector<int> v[100001];
+#include <bits/stdc++.h>
+using namespace std;
 int parent[100001][20];
 int height[100001];
 int square[20];
-int n, m;
+vector<int> nodes[100001];
 
-void tree(int pparent, int parentn) {
-	for (auto iter = v[parentn].begin(); iter != v[parentn].end(); iter++) {
-		int child = *iter;
-		if (pparent == child) continue;
-		height[child] = height[parentn] + 1;
-		parent[child][0] = parentn;
-		int ind = 1;
-		while (square[ind] <= n) {
-			parent[child][ind] = parent[parent[child][ind-1]][ind - 1];
-			ind++;
-		}
-		tree(parentn, child);
+void dfs(int x) {
+	for (int n : nodes[x]) {
+		if (height[n]) continue;
+		height[n] = height[x] + 1;
+		parent[n][0] = x;
+		dfs(n);
 	}
 }
 
 int main() {
-	scanf("%d", &n);
-	square[0] = 1;
-	for (int i = 1; i < 20; i++) square[i] = square[i-1]* 2;
-	for (int i = 1; i < n; i++) {
-		int s, e;
-		scanf("%d %d", &s, &e);
-		v[s].push_back(e);
-		v[e].push_back(s);
-	}
-	tree(-1, 1);
-	scanf("%d", &m);
-	while(m-->0) {
+	cin.tie(0); ios::sync_with_stdio(0);
+	int n;
+	cin >> n;
+	for (int i = 0; i < n - 1; i++) {
 		int a, b;
-		scanf("%d %d", &a, &b);
-		if (height[b] > height[a]) std::swap(a, b);
-		while (height[a] != height[b]) {
-			int ind = 0;
-			while (square[ind + 1] < height[a] - height[b]) ind++;
-			a = parent[a][ind];
-		}
-		while (a != b) {
-			int ind = 0;
-			while (parent[a][ind+1] != parent[b][ind+1]) ind++;
-			a = parent[a][ind]; b = parent[b][ind];
-		}
-		printf("%d\n", a);
+		cin >> a >> b;
+		nodes[a].push_back(b);
+		nodes[b].push_back(a);
 	}
-	return 0;
+	square[0] = 1;
+	for (int i = 1; i < 20; i++) square[i] = square[i - 1] * 2;
+	height[1] = 1;
+	dfs(1);
+
+	for (int j = 1; j < 20; j++)
+		for (int i = 1; i <= n; i++)
+			parent[i][j] = parent[parent[i][j - 1]][j - 1];
+
+	int m;
+	cin >> m;
+	while (m--) {
+		int a, b;
+		cin >> a >> b;
+		if (height[a] < height[b]) swap(a, b);
+		while (height[a] != height[b]) {
+			int idx = 0;
+			while (height[a] - height[b] > square[idx + 1]) idx++;
+			a = parent[a][idx];
+		}
+
+		while (a != b) {
+			int idx = 0;
+			while (parent[a][idx + 1] != parent[b][idx + 1]) idx++;
+			a = parent[a][idx]; b = parent[b][idx];
+		}
+		cout << a << "\n";
+	}
+
+
 }
