@@ -1,14 +1,11 @@
 import math
-
 def ccw(a, b, c):
     res = (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1])
-    if res > 0:
-        return 1
-    if res < 0:
-        return -1
+    if res > 0:return 1
+    if res < 0:return -1
     return 0
 
-def subtract_points(p1, p2):
+def subtract(p1, p2):
     return (p1[0] - p2[0], p1[1] - p2[1])
 
 def make_convex_hull(points):
@@ -45,13 +42,13 @@ def do_calipers(points, poly):
         next_a = (a + 1) % size
         next_b = (b + 1) % size
 
-        ccw_result = ccw(
-            (0, 0),
-            subtract_points(points[poly[b]], points[poly[next_b]]),
-            subtract_points(points[poly[a]], points[poly[next_a]])
+        res = ccw(
+            (0,0),
+            subtract(points[poly[b]], points[poly[next_b]]),
+            subtract(points[poly[a]], points[poly[next_a]])
         )
 
-        if ccw_result > 0:
+        if res > 0:
             a = next_a
             if a == 0:
                 break
@@ -66,10 +63,10 @@ C = int(input())
 points = []
 
 for _ in range(C):
-    x, y = map(int, input().split())
-    points.append((x, y))
+    x,y=map(int,input().split())
+    points.append((x,y))
 
-poly = make_convex_hull(points)
-result = do_calipers(points, poly)
+poly=make_convex_hull(points)
+result=do_calipers(points,poly)
 
 print(result)
