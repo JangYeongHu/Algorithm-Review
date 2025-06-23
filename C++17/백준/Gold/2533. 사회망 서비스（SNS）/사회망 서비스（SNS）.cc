@@ -2,52 +2,31 @@
 
 
 using namespace std;
-vector<int> edges[1'000'001];
-vector<int> tree[1'000'001];
-int dp[1'000'001];
+vector<int> e[1'000'001];
 bool vis[1'000'001];
+int dp[1'000'001][2];
 
-void dfs(int node) {
+void get(int node) {
 	vis[node] = 1;
-	for (int t : edges[node]) {
+	dp[node][1] += 1;
+	for (int t : e[node]) {
 		if (vis[t]) continue;
-		tree[node].push_back(t);
-		dfs(t);
+		get(t);
+		dp[node][0] += dp[t][1];
+		dp[node][1] += min(dp[t][0], dp[t][1]);
 	}
-}
-
-int get(int node) {
-	int re1 = 1,re2 = 0;
-	if (dp[node]) return dp[node];
-	vector<int> sons;
-	
-	for (int t : tree[node]) {
-		sons.push_back(t);
-		re1 += get(t);
-	}
-	re2 += sons.size();
-	for (int t : sons) {
-		for(int k: tree[t])
-			re2 += get(k);
-	}
-
-	dp[node] = min(re1, re2);
-
-	return dp[node];
-
 }
 
 int main() {
 	cin.tie(0)->sync_with_stdio(0);
 	int n; cin >> n;
-	for (int i = 0; i < n-1; i++) {
+	for (int i = 0; i < n - 1; i++) {
 		int u, v; cin >> u >> v;
-		edges[u].push_back(v);
-		edges[v].push_back(u);
+		e[u].push_back(v);
+		e[v].push_back(u);
 	}
-	dfs(1);
-
-	cout << get(1);
+	get(1);
+	cout << min(dp[1][0],dp[1][1]);
 
 	return 0;
 }
