@@ -1,21 +1,22 @@
 #include <bits/stdc++.h>
 #include <unordered_set>
 using namespace std;
-vector<string> tle;
 
-int parent[200 * 200 * 8];
+vector<string> sukgo;
+int parent[200*200*8];
 int height[200 * 200 * 8];
 int r, c;
+
 int find(int x) {
-	while (parent[x] != x) x = parent[x];
+	while (parent[x] != x) { x = parent[x];}
 	return x;
 }
 
-int make_one(int x, int y, int z) {
-	return(z * (c * r) + y * c + x);
+int make_idx(int x, int y, int z) {
+	return z * r * c + y * c + x;
 }
 
-void union_bulk(int a, int b) {
+void unn(int a,int b) {
 	a = find(a);
 	b = find(b);
 	if (a == b) return;
@@ -25,64 +26,65 @@ void union_bulk(int a, int b) {
 	else {
 		parent[a] = b;
 	}
-	if (height[a] == height[b]) height[b]++;
+	if (height[a] == height[b]) {
+		height[b]++;
+	}
 }
 
 int main() {
 	cin >> r >> c;
 	for (int i = 0; i < r; i++) {
 		string s; cin >> s;
-		tle.push_back(s);
+		sukgo.push_back(s);
 	}
-	int ans = 0;
 
 	for (int i = 0; i < r * c * 8; i++) {
-		parent[i] = i;
 		height[i] = 0;
+		parent[i] = i;
 	}
 
-	for (int i = 0; i < c; i++) {
-		for (int j = 0; j < r; j++) {
-			if (tle[j][i] == 'O') {
-				union_bulk(make_one(i, j, 0), make_one(i, j, 4));
-				union_bulk(make_one(i, j, 1), make_one(i, j, 5));
-				union_bulk(make_one(i, j, 2), make_one(i, j, 6));
-				union_bulk(make_one(i, j, 3), make_one(i, j, 7));
-			} else if(tle[j][i] == 'I') {
-				union_bulk(make_one(i, j, 0), make_one(i, j, 1));
-				union_bulk(make_one(i, j, 2), make_one(i, j, 3));
-				union_bulk(make_one(i, j, 4), make_one(i, j, 5));
-				union_bulk(make_one(i, j, 6), make_one(i, j, 7));
-			} else {
-				union_bulk(make_one(i, j, 0), make_one(i, j, 3));
-				union_bulk(make_one(i, j, 1), make_one(i, j, 2));
-				union_bulk(make_one(i, j, 4), make_one(i, j, 7));
-				union_bulk(make_one(i, j, 6), make_one(i, j, 5));
+	for (int y = 0; y < r; y++) {
+		for (int x = 0; x < c; x++) {
+			if (sukgo[y][x] == 'H') {
+				unn(make_idx(x, y, 0), make_idx(x, y, 3));
+				unn(make_idx(x, y, 1), make_idx(x, y, 2));
+				unn(make_idx(x, y, 4), make_idx(x, y, 7));
+				unn(make_idx(x, y, 6), make_idx(x, y, 5));
 			}
-			if (i != c - 1) {
-				union_bulk(make_one(i, j, 2), make_one(i+1, j,  1));
-				union_bulk(make_one(i, j, 3), make_one(i + 1, j, 0));
-				union_bulk(make_one(i, j, 6), make_one(i + 1, j, 5));
-				union_bulk(make_one(i, j, 7), make_one(i + 1, j, 4));
+			if (sukgo[y][x] == 'I') {
+				unn(make_idx(x, y, 0), make_idx(x, y, 1));
+				unn(make_idx(x, y, 2), make_idx(x, y, 3));
+				unn(make_idx(x, y, 4), make_idx(x, y, 5));
+				unn(make_idx(x, y, 6), make_idx(x, y, 7));
 			}
-			if (j != r - 1) {
-				union_bulk(make_one(i, j, 1), make_one(i, j+1, 0));
-				union_bulk(make_one(i, j, 2), make_one(i, j + 1, 3));
-				union_bulk(make_one(i, j, 5), make_one(i, j + 1, 4));
-				union_bulk(make_one(i, j, 6), make_one(i, j + 1, 7));
+			if (sukgo[y][x] == 'O') {
+				unn(make_idx(x, y, 0), make_idx(x, y, 4));
+				unn(make_idx(x, y, 1), make_idx(x, y, 5));
+				unn(make_idx(x, y, 2), make_idx(x, y, 6));
+				unn(make_idx(x, y, 3), make_idx(x, y, 7));
+			}
+			if (x != c - 1) {
+				unn(make_idx(x, y, 2), make_idx(x + 1, y, 1));
+				unn(make_idx(x, y, 3), make_idx(x + 1, y, 0));
+				unn(make_idx(x, y, 6), make_idx(x + 1, y, 5));
+				unn(make_idx(x, y, 7), make_idx(x + 1, y, 4));
+			}
+			if (y != r - 1) {
+				unn(make_idx(x, y, 1), make_idx(x, y+1, 0));
+				unn(make_idx(x, y, 2), make_idx(x, y+1, 3));
+				unn(make_idx(x, y, 6), make_idx(x, y+1, 7));
+				unn(make_idx(x, y, 5), make_idx(x, y+1, 4));
 			}
 		}
 	}
 
-	unordered_set<int> st;
+	unordered_set<int> ans;
+	for (int i = 0; i < r * c * 8; i++) {
+		if (ans.find(find(i)) != ans.end()) continue;
+		ans.insert(find(i));
+	}
 
-	for (int i = 0; i < c; i++)
-		for (int j = 0; j < r; j++)
-			for (int k = 0; k < 8; k++)
-				if (st.find(find(make_one(i, j, k))) == st.end())
-					st.insert(find(make_one(i, j, k)));
-
-	cout << st.size();
+	cout << ans.size();
 
 	return 0;
 }
