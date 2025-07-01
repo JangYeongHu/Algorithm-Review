@@ -1,0 +1,1 @@
+for i in range(int(input())):print('god',*(list(input().split())[1:]),sep='')
