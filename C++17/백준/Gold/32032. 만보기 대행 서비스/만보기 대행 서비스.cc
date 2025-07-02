@@ -8,17 +8,10 @@ ll n, d;
 ll get() {
 	if (pos[0] > 0) return pos[n - 1] * 2 + d;
 	if (pos[n - 1] < 0) return pos[0] * -2 + d;
-	int z_p = (upper_bound(pos, pos + n, 0) - pos);
-
-	ll ans = 0;
 	ll dis = pos[n - 1] - pos[0];
-	ans += dis * 2;
-	ans += min(min(pos[n - 1] * 2, d), pos[0] * -2);
-	ans += d;
+	ll ans = dis * 2 + d + min(min(pos[n - 1] * 2, d), pos[0] * -2);
 
-	ll t1 = 4 * dis;
-
-	t1 += (2 * dis < d) ? d - 2 * dis : 0;
+	ll t1 = 4 * dis + ((2 * dis < d) ? d - 2 * dis : 0);
 
 	return min(ans,t1);
 }
