@@ -1,9 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
-int parent[100001];
-int cnt[100001];
 
-vector<vector<int>> ans;
+int candy[30001];
+int parent[30001];
 
 int find(int x) {
 	if (parent[x] < 0) return x;
@@ -14,39 +13,40 @@ void unn(int a, int b) {
 	a = find(a);
 	b = find(b);
 	if (a == b) return;
-	if (parent[a] > parent[b])swap(a, b);
-	cnt[a] += cnt[b];
+	if (parent[a] > parent[b]) swap(a, b);
+	candy[a] += candy[b];
 	parent[a] += parent[b]; parent[b] = a;
 }
 
 int main() {
-	int n, m, k;
-	cin >> n >> m >> k;
+	cin.tie(0)->sync_with_stdio(0);
+	int n, m, k; cin >> n >> m >> k;
 	for (int i = 1; i <= n; i++) {
-		cin >> cnt[i];
+		cin >> candy[i];
 		parent[i] = -1;
 	}
 
 	for (int i = 0; i < m; i++) {
-		int a, b;
-		cin >> a >> b;
+		int a, b; cin >> a >> b;
 		unn(a, b);
 	}
-
-	ans.push_back(vector<int>(k));
-
-	for (int i = 1; i <= n; i++)  {
-		if (parent[i] >= 0) continue;
-		ans.push_back(vector<int>(k));
-		int s = ans.size() - 1;
-		for (int j = 1; j < k; j++) {
-			if (j + parent[i] < 0) ans[s][j] = ans[s - 1][j];
-			else {
-				ans[s][j] = max(ans[s - 1][j],ans[s-1][j+parent[i]]+cnt[i]);
-			}
+	vector<pair<int, int>> bags;
+	for (int i = 1; i <= n; i++) {
+		if (parent[i] < 0) {
+			bags.push_back({ -parent[i],candy[i] });
 		}
 	}
-	cout << ans[ans.size() - 1][k - 1];
+	vector<vector<int>> dp(bags.size() + 1, vector<int>(k, 0));
+	int idx = 1;
+	for (auto [w, v] : bags) {
+		for (int i = 1; i < k; i++) {
+			if (i - w < 0)dp[idx][i] = dp[idx - 1][i];
+			else dp[idx][i] = max(dp[idx-1][i], dp[idx-1][i - w] + v);
+		}
+		idx++;
+	}
+
+	cout << dp.back()[k-1];
 
 	return 0;
 }
