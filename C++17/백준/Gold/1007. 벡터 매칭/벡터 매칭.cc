@@ -1,35 +1,50 @@
-#include <cstdio>
-#include <cmath>
-#include <algorithm>
+#include <bits/stdc++.h>
 using namespace std;
-pair<long long, long long> pos[20];
 int n;
-long long mn;
-void bf(int ind,int cnt,bool vis[]) {
-	if (n/2 == cnt) {
-		long long x = 0, y = 0;
-		for (int i = 0; i < n; i++)
-			if (vis[i]) { x += pos[i].first; y += pos[i].second; }
-			else { x -= pos[i].first; y -= pos[i].second; }
-		mn = min(mn,x*x+y*y); return;
-	};
-	for (int i = ind+1; i < n; i++) {
-		vis[i] = 1;
-		bf(i,cnt + 1, vis);
-		vis[i] = 0;
+double mn;
+
+void bf(int cnt,int now,int x,vector<pair<int,int>> & v) {
+	if (cnt == n/2) {
+		double xs = 0, ys = 0;
+		for (int i = 0; i < n; i++) {
+			if (x & (1 << i)) {
+				xs += v[i].first;
+				ys += v[i].second;
+			}
+			else {
+				xs -= v[i].first;
+				ys -= v[i].second;
+			}
+		}
+		double now = sqrt(xs * xs + ys * ys);
+		mn = min(mn, now);
+		return;
+	}
+	for (int i = now; i < n; i++) {
+		if (x & (1 << i)) continue;
+		bf(cnt+1,i+1,x | (1 << i), v);
 	}
 }
 
+void get() {
+	mn = 1e18;
+	cin >> n;
+	vector<pair<int, int>> v;
+	for (int i = 0; i < n; i++) {
+		pair<int, int> p;
+		cin >> p.first >> p.second;
+		v.push_back(p);
+	}
+	bf(1,0,1, v);
+	cout << fixed << setprecision(8) << mn << "\n";
+	return;
+}
+
 int main() {
-	int T;
-	scanf("%d", &T);
-	while (T-- > 0) {
-		bool vis[20] = { 0, };
-		mn = (long long)1<<60;
-		scanf("%d", &n);
-		for (int i = 0; i < n; i++) scanf("%lld %lld", &pos[i].first, &pos[i].second);
-		bf(0,0, vis);
-		printf("%lf\n", sqrt(mn));
+	cin.tie(0)->sync_with_stdio(0);
+	int t; cin >> t;
+	while (t--) {
+		get();
 	}
 	return 0;
 }
