@@ -1,16 +1,10 @@
-#include <iostream>
-#include <string>
-#include <regex>
-#include <algorithm>
+#include <bits/stdc++.h>
 using namespace std;
-
 int main() {
-	ios::sync_with_stdio(false);
-	cin.tie(NULL);
 	int T;
 	string s;
 	cin >> T;
-	while (T-- > 0) {
+	while (T--) {
 		cin >> s;
 		reverse(s.begin(), s.end());
 		regex re("(1+0+01|10)+");
