@@ -20,6 +20,7 @@ ll Sum(int l, int r) {
 }
 
 int main() {
+    cin.tie(0)->sync_with_stdio(0);
     int n; cin >> n;
     vector<int> C;
     for (int i = 0; i < n; i++) {
