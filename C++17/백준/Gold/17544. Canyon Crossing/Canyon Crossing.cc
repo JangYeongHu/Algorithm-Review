@@ -48,6 +48,7 @@ int bfs(int a) {
 }
 
 int main() {
+    cin.tie(0)->sync_with_stdio(0);
     cin >> r >> c >> k;
     for(int i = 0; i < r; i++)
         for(int j = 0; j < c; j++)
