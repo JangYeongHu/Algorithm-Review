@@ -1,5 +1,6 @@
 #include <cstdio>
 int n,res = 0;
+
 void move_l(int arr[][20]) {
 	bool vis[20][20] = { 0, };
 	for (int i = 1; i < n; i++) {
@@ -38,6 +39,8 @@ void move_r(int arr[][20]) {
 		}
 	}
 }
+
+
 void move_u(int arr[][20]) {
 	bool vis[20][20] = { 0, };
 	for (int i = 1; i < n; i++) {
@@ -56,6 +59,7 @@ void move_u(int arr[][20]) {
 		}
 	}
 }
+
 void move_d(int arr[][20]) {
 	bool vis[20][20] = { 0, };
 	for (int i = n - 2; i >= 0; i--) {
@@ -74,7 +78,9 @@ void move_d(int arr[][20]) {
 		}
 	}
 }
+
 void (*fp[4])(int[][20]) = { move_l,move_r,move_u,move_d };
+
 void dfs(int cnt,int a[][20]) {
 	if (cnt ==	5) {
 		for (int i = 0; i < n; i++)
@@ -91,6 +97,7 @@ void dfs(int cnt,int a[][20]) {
 		dfs(cnt + 1, b);
 	}
 }
+
 int main() {
 	int arr[20][20];
 	scanf("%d", &n);
