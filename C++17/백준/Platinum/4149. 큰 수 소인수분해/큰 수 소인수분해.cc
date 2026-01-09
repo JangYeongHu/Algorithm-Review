@@ -3,6 +3,7 @@ using namespace std;
 
 constexpr int SZ = 10'000'000;
 bool PrimeCheck[SZ+1]; vector<int> Primes;
+
 void Sieve() {
     memset(PrimeCheck, true, sizeof PrimeCheck);
     PrimeCheck[0] = PrimeCheck[1] = false;
@@ -41,7 +42,7 @@ bool IsPrime(ll n) {
 }
 ll Rho(ll n){
     while(true) {
-        ll x = rand() % (n-2) + 2,y = x, c = rand() % (n-1)+1;
+        ll x =  rand() % (n-2) + 2,y = x, c = rand() % (n-1) + 1;
         while(true) {
             x = (MulMod(x,x,n)+c)%n;
             y = (MulMod(y,y,n)+c)%n;
@@ -68,10 +69,16 @@ vector<pair<ll,ll>> Factorize(ll n) {
     return v;
 }
 int main() {
+    cin.tie(0)->sync_with_stdio(0);
+    cout.tie(0);
     Sieve();
     ll n; cin >> n;
     vector<pair<ll,ll>> res = Factorize(n);
+    sort(res.begin(), res.end());
     for(auto [a,b]: res) {
-        cout << a << "\n";
+        for (int i = 0; i < b; i++)
+        {
+            cout << a << "\n";
+        }
     }
 }
