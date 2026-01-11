@@ -1,30 +1,33 @@
 #include <bits/stdc++.h>
 using namespace std;
 int arr[15];
-int s, cnt = 0;
-bool check(int n) {
-    for (int i = 0; i < n; i++) {
-        if (arr[i] == arr[n] || abs(n - i) == abs(arr[n] - arr[i]))
-            return true;
-    }
-    return false;
+int N;
+
+bool Check(int idx) {
+	for (int i = 0; i < idx; i++)
+		if (arr[i] == arr[idx] || abs(idx - i) == abs(arr[idx] - arr[i]))
+			return 0;
+	
+	return 1;
 }
 
-void queen(int n) {
-    if (n == s) {
-        cnt++;
-        return;
-    }
-    for (int i = 0; i < s; i++) {
-        arr[n] = i;
-        if (check(n)) continue;
-        queen(n + 1);
-    }
+int Queen(int idx) {
+	if(N==idx)
+		return 1;
+	
+	int ans = 0;
+
+	for (int i = 0; i < N; i++)
+	{
+		arr[idx] = i;
+		if(!Check(idx)) continue;
+		ans += Queen(idx+1);
+	}
+	return ans;
 }
 
 int main() {
-    cin >> s;
-    queen(0);
-    cout << cnt;
-    return 0;
+	cin >> N;
+	cout << Queen(0);
+	return 0;
 }
