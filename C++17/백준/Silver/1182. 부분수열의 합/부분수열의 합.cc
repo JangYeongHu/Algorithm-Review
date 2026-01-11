@@ -2,10 +2,10 @@
 using namespace std;
 int arr[20];
 int n,s;
-int BackTrancking(int k, int num) {
+int BackTracking(int k, int num) {
 	if (k == n)
 		return num==s;
-	return BackTrancking(k + 1, num) + BackTrancking(k + 1, num + arr[k]);
+	return BackTracking(k + 1, num) + BackTracking(k + 1, num + arr[k]);
 }
 
 int main() {
@@ -13,7 +13,7 @@ int main() {
 	for (int i = 0; i < n; i++)
 		cin >> arr[i];
 	
-	int ans = BackTrancking(0, 0);
+	int ans = BackTracking(0, 0);
 
 	if (!s) ans--;
 
